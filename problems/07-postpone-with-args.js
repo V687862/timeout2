@@ -28,6 +28,10 @@ function postponeWithArgs(cb, delay) {
   }
 }
 
+function postponeWithArgs(cb, delay) {
+  return (...args) => setTimeout(() => cb(...args), delay);
+}
+
 // Examples
 
 const greet = (person) => console.log('Hello ' + person + '!');
