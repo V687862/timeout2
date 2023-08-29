@@ -1,13 +1,13 @@
 /***********************************************************************
 Write a function, `dynamicIntervalCount`, that accepts a callback, a delay
-in milliseconds, and an optional amount as arguments. The function should 
-set an interval with the given callback and delay. If an amount argument 
-is passed, the interval should be cleared after the callback has been 
+in milliseconds, and an optional amount as arguments. The function should
+set an interval with the given callback and delay. If an amount argument
+is passed, the interval should be cleared after the callback has been
 called 'amount' number of times. If an amount argument is not passed,
 the interval should not be cleared and `dynamicIntervalCount` should instead
 return the Timeout object for the interval.
 
-In addition to Mocha, we recommend that you test your code manually using 
+In addition to Mocha, we recommend that you test your code manually using
 node with the examples below.
 
 Examples:
@@ -24,20 +24,40 @@ const timeoutObject = dynamicIntervalCount(function() {
 console.log(timeoutObject); // Timeout { ... }
 ***********************************************************************/
 
-const dynamicIntervalCount = (cb, delay, amount) => {
-  if (amount === undefined) {
+// Option 1
+// const dynamicIntervalCount = (cb, delay, amount) => {
+//   if (amount === undefined) {
+//       return setInterval(cb, delay);
+//   }
+
+//   let count = 0;
+//   const intervals = setInterval(() => {
+//       cb();
+//       count++;
+//       if (count === amount) {
+//           clearInterval(intervals);
+//       }
+//   }, delay);
+// };
+
+// Option 2
+function dynamicIntervalCount(cb, delay, amount) {
+  if (amount) {
+      cb();
+      amount--;
+      const interval = setInterval(function() {
+          if (amount > 0) {
+              cb();
+              amount--;
+          } else {
+              clearInterval(interval);
+          }
+      }, delay);
+      return interval;
+  } else {
       return setInterval(cb, delay);
   }
-
-  let count = 0;
-  const intervals = setInterval(() => {
-      cb();
-      count++;
-      if (count === amount) {
-          clearInterval(intervals);
-      }
-  }, delay);
-};
+}
 
 //Example
 
